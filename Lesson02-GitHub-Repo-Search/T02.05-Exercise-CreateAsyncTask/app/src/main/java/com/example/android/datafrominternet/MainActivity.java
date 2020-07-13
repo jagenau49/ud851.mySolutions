@@ -29,7 +29,7 @@ import java.io.IOException;
 import java.net.URL;
 
 public class MainActivity extends AppCompatActivity {
-    URL githubSearchUrl=null;
+
 
     private EditText mSearchBoxEditText;
 
@@ -56,38 +56,38 @@ public class MainActivity extends AppCompatActivity {
      */
     private void makeGithubSearchQuery() {
         String githubQuery = mSearchBoxEditText.getText().toString();
-        githubSearchUrl = NetworkUtils.buildUrl(githubQuery);
+        URL githubSearchUrl = NetworkUtils.buildUrl(githubQuery);
 
         mUrlDisplayTextView.setText(githubSearchUrl.toString());
 
         // COMPLETED (4) Create a new GithubQueryTask and call its execute method, passing in the url to query
 
         GithubQueryTask mGithubQueryTask=new GithubQueryTask();
-        mGithubQueryTask.execute(githubSearchUrl);//Todo:Bu satiri kontrol et.
+        mGithubQueryTask.execute(githubSearchUrl);
     }
 
     // COMPLETED (1) Create a class called GithubQueryTask that extends AsyncTask<URL, Void, String>
     // COMPLETED (2) Override the doInBackground method to perform the query. Return the results. (Hint: You've already written the code to perform the query)
     // COMPLETED (3) Override onPostExecute to display the results in the TextView
 public class GithubQueryTask extends AsyncTask<URL,Void,String>{
-        String githubSearchResults = null;
+
 
         @Override
         protected String doInBackground(URL... urls) {
-
+            String githubSearchResults = null;
             try {
-                githubSearchResults = NetworkUtils.getResponseFromHttpUrl(githubSearchUrl);
+                githubSearchResults = NetworkUtils.getResponseFromHttpUrl(urls[0]);
 
             } catch (IOException e) {
                 e.printStackTrace();
             }
-            return null;
+            return githubSearchResults;
         }
 
         @Override
-        protected void onPostExecute(String s) {
+        protected void onPostExecute(String githubSearchResults) {
 
-            super.onPostExecute(s);
+            super.onPostExecute(githubSearchResults);
             if (githubSearchResults!=null && !githubSearchResults.equals("")) {
                 mSearchResultsTextView.setText(githubSearchResults);
             }
